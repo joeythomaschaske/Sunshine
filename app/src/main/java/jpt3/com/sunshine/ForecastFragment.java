@@ -27,7 +27,7 @@ public class ForecastFragment extends Fragment {
         ArrayAdapter<String> listViewAdapter = null;
         ListView listView = null;
         View rootView = null;
-        String forecastJsonStr = null;
+        String forecastJsonStr = "";
 
         try {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -54,9 +54,9 @@ public class ForecastFragment extends Fragment {
             HttpURLConnection urlConnection = null;
             InputStream inputStream = null;
             StringBuffer buffer = null;
-            String forecastJsonStr = null;
+            String forecastJsonStr = "";
             BufferedReader reader = null;
-            String line = null;
+            String line = "";
 
             try {
                 url = new URL(urls[0]);
