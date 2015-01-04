@@ -75,12 +75,13 @@ public class MainActivity extends ActionBarActivity {
                 weekForcast.add("Thurs-Rainy-64/51");
                 weekForcast.add("Fri -Foggy-70/46");
                 weekForcast.add("Sat-Sunny-76/68");
+                weekForcast.get(15);
                 listView = (ListView) rootView.findViewById(R.id.listview_forecast);
                 listViewAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForcast);
                 listView.setAdapter(listViewAdapter);
             }
             catch (Exception e) {
-                Log.e("Sunshine Exception(onCreateView)", Integer.toString(Thread.currentThread().getStackTrace()[2].getLineNumber()), e);
+                Log.e("Sunshine Exception(onCreateView)" + Thread.currentThread().getStackTrace()[2].getLineNumber(), e.getMessage(), e);
             }
             return rootView;
         }
