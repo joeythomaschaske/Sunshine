@@ -17,10 +17,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
-
     public ForecastFragment() {
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ArrayList<String> weekForcast = null;
