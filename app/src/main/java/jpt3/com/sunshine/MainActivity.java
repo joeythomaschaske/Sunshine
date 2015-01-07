@@ -1,4 +1,5 @@
 package jpt3.com.sunshine;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -42,8 +43,10 @@ public class MainActivity extends ActionBarActivity {
 
         try{
             id = item.getItemId();
-            if (id == R.id.action_settings)
+            if (id == R.id.action_settings){
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
+            }
         } catch (Exception e){
             Log.e("MainActivity Exception(onCreateOptionsMenu)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
         }

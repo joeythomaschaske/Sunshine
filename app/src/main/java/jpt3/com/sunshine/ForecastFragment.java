@@ -1,9 +1,11 @@
 package jpt3.com.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,13 +62,11 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = -1;
-        FetchWeatherTask weatherTask = null;
 
         try{
             id = item.getItemId();
             if (id == R.id.action_refresh) {
-                weatherTask = new FetchWeatherTask();
-                weatherTask.execute("53211");
+                updateWeather();
                 return true;
             }
         } catch (Exception e){
@@ -84,12 +84,6 @@ public class ForecastFragment extends Fragment {
         try {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
             weekForcast = new ArrayList<>();
-            weekForcast.add("Today-Sunny-88/63");
-            weekForcast.add("Tomorrow-Foggy-70/46");
-            weekForcast.add("Weds-Cloudy-72/63");
-            weekForcast.add("Thurs-Rainy-64/51");
-            weekForcast.add("Fri -Foggy-70/46");
-            weekForcast.add("Sat-Sunny-76/68");
             listView = (ListView) rootView.findViewById(R.id.listview_forecast);
             listViewAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForcast);
             listView.setAdapter(listViewAdapter);
@@ -106,6 +100,34 @@ public class ForecastFragment extends Fragment {
             Log.e("ForecastFragment Exception(onCreateView)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
         }
         return rootView;
+    }
+
+    @Override
+    public void onStart(){
+
+        try {
+            super.onStart();
+            updateWeather();
+        }catch (Exception e){
+            Log.e("ForecastFragment Exception(onStart)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
+        }
+
+    }
+
+    private void updateWeather(){
+        String location = "";
+        SharedPreferences preferences = null;
+        FetchWeatherTask weatherTask = null;
+
+        try{
+            weatherTask = new FetchWeatherTask();
+            preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+            weatherTask.execute(location);
+        } catch (Exception e){
+            Log.e("ForecastFragment Exception(updateWeather)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
+        }
+
     }
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
