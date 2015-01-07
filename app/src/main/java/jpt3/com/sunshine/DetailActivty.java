@@ -1,5 +1,6 @@
 package jpt3.com.sunshine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 public class DetailActivty extends ActionBarActivity {
@@ -67,10 +69,17 @@ public class DetailActivty extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            String recievedMessage = "";
+            Intent recievedIntent = null;
+            TextView detailTextView = null;
             View rootView = null;
 
             try{
                 rootView = inflater.inflate(R.layout.fragment_detail_activty, container, false);
+                recievedIntent = getActivity().getIntent();
+                recievedMessage = recievedIntent.getStringExtra(Intent.EXTRA_TEXT);
+                detailTextView = (TextView) rootView.findViewById(R.id.detail_text_view);
+                detailTextView.setText(recievedMessage);
             }
             catch (Exception e){
                 Log.e("DetailActivity Exception(onCreateView)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
