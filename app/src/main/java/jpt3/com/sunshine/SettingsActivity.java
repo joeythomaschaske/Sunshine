@@ -18,7 +18,8 @@ public class SettingsActivity extends PreferenceActivity
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
-        } catch (Exception e){
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
+        } catch (Exception e) {
             Log.e("SettingsActivity Exception(onCreate)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
         }
     }
@@ -28,7 +29,7 @@ public class SettingsActivity extends PreferenceActivity
         try {
             preference.setOnPreferenceChangeListener(this);
             onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("SettingsActivity Exception(bindPreferencesSummaryToValue)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
         }
     }
@@ -48,7 +49,7 @@ public class SettingsActivity extends PreferenceActivity
             } else {
                 preference.setSummary(stringValue);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("SettingsActivity Exception(onPreferenceChange)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
         }
         return true;

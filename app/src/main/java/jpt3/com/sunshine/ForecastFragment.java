@@ -251,8 +251,16 @@ public class ForecastFragment extends Fragment {
             long roundedHigh = -1;
             long roundedLow = -1;
             String highLowStr = "";
+            String units = "";
+            SharedPreferences preferences = null;
 
             try{
+                preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                units = preferences.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_metric));
+                if (units.equals(getString(R.string.pref_units_imperial))){
+                   high = (high * 1.8) + 32;
+                   low = (low * 1.8) + 32;
+                }
                 roundedHigh = Math.round(high);
                 roundedLow = Math.round(low);
                 highLowStr = roundedHigh + "/" + roundedLow;
