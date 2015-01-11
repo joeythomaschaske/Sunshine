@@ -3,10 +3,13 @@ package jpt3.com.sunshine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +25,7 @@ public class DetailActivty extends ActionBarActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_detail_activty);
             if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.container, new DetailFragment()).commit();
             }
         }
         catch (Exception e){
@@ -33,6 +36,7 @@ public class DetailActivty extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem menuItem = null;
 
         try{
             getMenuInflater().inflate(R.menu.menu_detail_activty, menu);
@@ -63,9 +67,10 @@ public class DetailActivty extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DetailFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public DetailFragment() {
+            setHasOptionsMenu(true);
         }
 
         @Override
@@ -83,9 +88,42 @@ public class DetailActivty extends ActionBarActivity {
                 detailTextView.setText(recievedMessage);
             }
             catch (Exception e){
-                Log.e("DetailActivity Exception(onCreateView)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
+                Log.e("DetailFragment Exception(onCreateView)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
             }
             return rootView;
+        }
+
+            @Override
+            public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+                MenuItem menuItem = null;
+                ShareActionProvider shareActionProvider = null;
+
+                try{
+                    inflater.inflate(R.menu.detailfragment, menu);
+                    menuItem = menu.findItem(R.id.action_share);
+                    shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+                    shareActionProvider.setShareIntent(createShareForecastIntent());
+                } catch (Exception e){
+                    Log.e("DetailFragment Exception(onCreateOptionsMenu)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
+                }
+            }
+
+        private Intent createShareForecastIntent(){
+            Intent shareIntent = null;
+            Intent recievedIntent = null;
+
+            try{
+                shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                shareIntent.setType("text/plain");
+                recievedIntent = getActivity().getIntent();
+                shareIntent.putExtra(Intent.EXTRA_TEXT, recievedIntent.getStringExtra(Intent.EXTRA_TEXT) + " #SunshineApp");
+
+            } catch(Exception e){
+                Log.e("DetailFragment Exception(createShareForecastIntent)" + Thread.currentThread().getStackTrace()[1].getLineNumber(), e.getMessage(), e);
+            }
+
+            return shareIntent;
         }
     }
 }
